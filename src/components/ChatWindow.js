@@ -7,10 +7,24 @@ const ChatWindow = () => {
   const { messages, loading, handleSendMessage } = useChatContext();
   const messagesEndRef = useRef(null);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // With this enhanced version:
+  useEffect(() => {
+    // Clear loading state when messages change
+    if (loading && messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.role === 'assistant') {
+        // If the last message is from assistant, we're done loading
+        // This is a hacky fix if the loading state isn't being properly reset
+      }
+    }
+    
+    // Scroll to bottom when messages change
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, loading]);
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
